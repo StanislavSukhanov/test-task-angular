@@ -1,0 +1,14 @@
+header {
+  position: relative;
+}
+
+.header-right {
+  position: absolute;
+  right: 0;
+  top: 16px;
+  z-index: 5;
+
+  .search {
+    width: 200px;
+  }
+}

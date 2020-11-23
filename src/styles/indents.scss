@@ -1,0 +1,41 @@
+@for $value from 0 through 300 {
+  .p-#{$value} {
+    padding: #{$value}px;
+  }
+
+  .pt-#{$value} {
+    padding-top: #{$value}px;
+  }
+
+  .pb-#{$value} {
+    padding-bottom: #{$value}px;
+  }
+
+  .pr-#{$value} {
+    padding-right: #{$value}px;
+  }
+
+  .pl-#{$value} {
+    padding-left: #{$value}px;
+  }
+
+  .m-#{$value} {
+    margin: #{$value}px;
+  }
+
+  .mt-#{$value} {
+    margin-top: #{$value}px;
+  }
+
+  .mb-#{$value} {
+    margin-bottom: #{$value}px;
+  }
+
+  .mr-#{$value} {
+    margin-right: #{$value}px;
+  }
+
+  .ml-#{$value} {
+    margin-left: #{$value}px;
+  }
+}

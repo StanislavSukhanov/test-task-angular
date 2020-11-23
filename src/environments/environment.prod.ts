@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  baseUrl: 'https://test-api.ci.gbksoft.net/rest'
 };

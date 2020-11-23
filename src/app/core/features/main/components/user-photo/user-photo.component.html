@@ -1,0 +1,9 @@
+<div class="flex flex-column align-center">
+  <div class="image-container mb-24 flex align-center center">
+    <img mat-card-image [src]="photoUrl || fallbackUrl">
+  </div>
+  <div class="flex flex-row space-between">
+    <button mat-flat-button style="margin-right: 8px" color="primary">Upload photo</button>
+    <button mat-flat-button color="warn">Delete photo</button>
+  </div>
+</div>
