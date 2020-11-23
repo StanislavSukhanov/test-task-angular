@@ -43,7 +43,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   }
 
-  updatePhoto(): void {
+  updatePhoto($event: FormData) {
 
   }
 }
