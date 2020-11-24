@@ -26,4 +26,12 @@ export class ApiService {
       .pipe(map((res: UserDataResponseModel) => res.result));
   }
 
+  updateUserPhoto(data: FormData): Observable<UserModel> {
+    return this.http.post<UserDataResponseModel>(`${url}/v1/user/profile/image`, data)
+      .pipe(map(res => res.result));
+  }
+
+  deleteUserPhoto(): Observable<void> {
+    return this.http.delete<void>(`${url}/v1/user/profile/image`);
+  }
 }

@@ -40,10 +40,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   deletePhoto(): void {
-
+    this.userDataService.deletePhoto();
   }
 
-  updatePhoto($event: FormData) {
-
+  updatePhoto($event: FormData): void {
+    this.userDataService.updateUserPhoto($event);
   }
 }

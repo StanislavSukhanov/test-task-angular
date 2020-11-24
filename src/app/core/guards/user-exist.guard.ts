@@ -14,7 +14,7 @@ export class UserExistGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
-    if (!this.userService.userDataExists) {
+    if (!this.userService.userValue) {
       this.userService.loadUserData();
     }
     return true;

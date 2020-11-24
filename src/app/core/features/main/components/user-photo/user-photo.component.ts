@@ -29,6 +29,15 @@ export class UserPhotoComponent implements OnInit {
   }
 
   focus(upload: HTMLInputElement) {
-    upload.select();
+    upload.click();
+  }
+
+  handleUpload(files: any): void {
+    if (files && files.length > 0) {
+      const formData = new FormData();
+      formData.append('image', files[0] as File);
+      this.updatePhoto.emit(formData);
+    }
+    return;
   }
 }

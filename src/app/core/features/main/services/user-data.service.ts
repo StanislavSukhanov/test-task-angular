@@ -15,7 +15,7 @@ export class UserDataService {
     return this.currentUser$.asObservable();
   }
 
-  get userDataExists(): UserModel | null {
+  get userValue() {
     return this.currentUser$.value;
   }
 
@@ -34,6 +34,23 @@ export class UserDataService {
     // updating user value and saving it
     this.apiService.updateUserDetails(data).pipe(
       tap(user => this.setUser(user))
+    ).subscribe();
+  }
+
+  updateUserPhoto(data: FormData): void {
+      this.apiService.updateUserPhoto(data).pipe(
+        tap(user => this.setUser(user))
+      ).subscribe();
+  }
+
+  deletePhoto(): void {
+    this.apiService.deleteUserPhoto().pipe(
+      tap(() => {
+        // removing a user's image
+        const newUserValue = this.userValue;
+        delete newUserValue.image;
+        this.setUser(newUserValue);
+      })
     ).subscribe();
   }
 }
