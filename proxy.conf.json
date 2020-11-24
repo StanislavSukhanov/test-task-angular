@@ -1,7 +1,0 @@
-{
-  "/api": {
-    "target": "https://test-api.ci.gbksoft.net",
-    "secure": true,
-    "changeOrigin": true
-  }
-}
