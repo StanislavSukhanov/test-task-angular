@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { fallbackUrl } from '../../constants/constants';
 
 @Component({
@@ -7,7 +7,7 @@ import { fallbackUrl } from '../../constants/constants';
   styleUrls: ['./user-photo.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class UserPhotoComponent implements OnInit {
+export class UserPhotoComponent {
 
   @Input() photoUrl: 'string';
   @Input() enableSend: boolean;
@@ -16,16 +16,11 @@ export class UserPhotoComponent implements OnInit {
 
   fallbackPhotoUrl = fallbackUrl;
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
-  update(): void{
+  update(): void {
     this.updatePhoto.emit();
   }
 
-  delete(): void{
+  delete(): void {
     this.deletePhoto.emit();
   }
 

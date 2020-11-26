@@ -9,14 +9,27 @@ import { tap } from 'rxjs/operators';
 })
 export class SearchUsersService {
 
-  private readonly usersList: BehaviorSubject<UserModel[]> = new BehaviorSubject<UserModel[]>([]);
+  private readonly usersList: BehaviorSubject<UserModel[] | null> = new BehaviorSubject<UserModel[]>(null);
   userList$: Observable<UserModel[]> = this.usersList.asObservable();
-  constructor(private apiService: ApiService) { }
+
+  constructor(private apiService: ApiService) {
+  }
+
+  get usersValue(): UserModel[] | null {
+    return this.usersList.value;
+  }
 
   getUsers(params: string): void {
     this.apiService.searchUsers(params).pipe(
       tap(users => {
-        console.log(users);
+        this.usersList.next(users);
+      })
+    ).subscribe();
+  }
+
+  getAllUsers() {
+    this.apiService.getAllUsers().pipe(
+      tap(users => {
         this.usersList.next(users);
       })
     ).subscribe();

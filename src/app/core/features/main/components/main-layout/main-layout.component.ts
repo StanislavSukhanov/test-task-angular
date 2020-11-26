@@ -9,7 +9,7 @@ import { SearchUsersService } from '../../services/search-users.service';
   styleUrls: ['./main-layout.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MainLayoutComponent implements OnInit, OnDestroy{
+export class MainLayoutComponent implements OnInit, OnDestroy {
 
   searchSubject$ = new Subject<string>();
   destroy$ = new Subject<void>();
@@ -22,7 +22,6 @@ export class MainLayoutComponent implements OnInit, OnDestroy{
       debounceTime(300),
       distinctUntilChanged(),
       tap(name => {
-        console.log(name);
         this.searchUsersService.getUsers(`?searchString=${name}`);
       })
     ).subscribe();

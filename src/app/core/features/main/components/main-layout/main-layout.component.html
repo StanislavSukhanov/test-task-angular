@@ -1,4 +1,3 @@
-
 <header class="pt-16 mb-100">
   <nav mat-tab-nav-bar [backgroundColor]="'blue'">
     <a mat-tab-link [active]="rla.isActive"
@@ -16,7 +15,7 @@
       <mat-label>Search</mat-label>
       <input matInput type="text" #searchInput (input)="searchUsers(searchInput.value)">
       <button mat-button *ngIf="searchInput.value"
-              (click)="searchInput.value = ''"
+              (click)="searchInput.value = ''; searchUsers('')"
               matSuffix mat-icon-button
               aria-label="Clear">
         <mat-icon>close</mat-icon>

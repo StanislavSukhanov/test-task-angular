@@ -5,6 +5,7 @@ import { environment } from '../../../../../environments/environment';
 import { UserDataResponseModel, UserLocationModel, UserSearchResponseModel } from '../models/main.models';
 import { UserModel } from '../../../../shared/models/shared.models';
 import { map } from 'rxjs/operators';
+import { LoginModel } from '../../auth/models/auth.models';
 
 const url = environment.baseUrl;
 
@@ -47,11 +48,15 @@ export class ApiService {
     return this.http.get<UserSearchResponseModel>(`${url}/v1/user/search${params}`).pipe(map(res => res.result));
   }
 
-  getUsers() {
-
+  getAllUsers(): Observable<UserModel[]> {
+    return this.http.get<UserSearchResponseModel>(`${url}/v1/user`).pipe(map(res => res.result));
   }
 
-  getUserById(id: string): Observable<UserModel>  {
+  getUserById(id: string): Observable<UserModel> {
     return this.http.get<UserDataResponseModel>(`${url}/v1/user/${id}`).pipe(map(res => res.result));
+  }
+
+  logOut(): Observable<LoginModel> {
+    return this.http.post<LoginModel>(`${url}/v1/user/logout`, {});
   }
 }

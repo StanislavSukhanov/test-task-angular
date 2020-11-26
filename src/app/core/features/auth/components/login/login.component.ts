@@ -16,13 +16,14 @@ export class LoginComponent {
     private loginRegisterService: LoginRegisterService,
     private storageService: AppStorageService,
     private router: Router
-  ) { }
+  ) {
+  }
 
   logIn($event: LoginRegisterModel) {
     this.loginRegisterService.login($event).subscribe(token => {
-      this.storageService.set('token', token);
-      this.router.navigate(['/']);
-    },
+        this.storageService.set('token', token);
+        this.router.navigate(['']);
+      },
       error => console.log(error));
   }
 }

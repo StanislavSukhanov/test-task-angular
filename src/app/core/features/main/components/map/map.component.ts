@@ -1,9 +1,8 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
-import MarkerClusterer from '@google/markerclusterer';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, OnDestroy, Output, ViewChild } from '@angular/core';
+import MarkerClusterer from '@google/markerclustererplus';
 import { Observable, Subject } from 'rxjs';
 import { UserModel } from '../../../../../shared/models/shared.models';
-import { debounceTime, tap } from 'rxjs/operators';
-import { computeDistanceBetween } from 'spherical-geometry-js';
+import { takeUntil } from 'rxjs/operators';
 import { SearchByLocationModel } from '../../models/main.models';
 import { customMarker } from '../../helpers/map-popup';
 import { Router } from '@angular/router';
@@ -17,16 +16,18 @@ import Marker = google.maps.Marker;
   styleUrls: ['./map.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MapComponent implements AfterViewInit {
+export class MapComponent implements AfterViewInit, OnDestroy {
 
   @Output() searchUsersAround: EventEmitter<SearchByLocationModel> = new EventEmitter<SearchByLocationModel>();
 
   @ViewChild('map', {static: false}) mapElement: ElementRef;
+
   map: google.maps.Map;
-  searchValue$: Subject<any> = new Subject<any>();
   currentUser$: Observable<UserModel> = this.userDataService.userData;
   foundUsers$: Observable<UserModel[]> = this.searchUsersService.userList$;
   markers: Marker[];
+  markersClusterer: MarkerClusterer;
+  destroyer$: Subject<void> = new Subject<void>();
 
   constructor(private router: Router,
               private userDataService: UserDataService,
@@ -34,13 +35,7 @@ export class MapComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-
-    this.searchValue$.pipe(
-      debounceTime(300),
-      tap(val => this.searchUsersAround.emit(val))
-    ).subscribe();
-
-    this.currentUser$.subscribe(user => {
+    this.currentUser$.pipe(takeUntil(this.destroyer$)).subscribe(user => {
       if (user) {
         this.initMap(user.lat, user.lon);
       }
@@ -55,37 +50,35 @@ export class MapComponent implements AfterViewInit {
   initMap(lat, lng): void {
     const mapProperties = {
       center: new google.maps.LatLng(lat, lng),
-      zoom: 18,
+      zoom: 11,
       mapTypeId: google.maps.MapTypeId.TERRAIN
     };
     this.map = new google.maps.Map(this.mapElement.nativeElement, mapProperties);
-    this.map.addListener('bounds_changed', () => {
-
-      const center = this.map.getCenter();
-      const bound = this.map.getBounds().getNorthEast();
-
-      const radius = computeDistanceBetween(center, bound) / 1000;
-      this.searchValue$.next({radius, center: {lat: center.lat(), lon: center.lng()}});
-    });
+    this.initClusterer();
   }
 
   updateMarkers(users: UserModel[]) {
     this.cleanMarkers();
     this.markers = [...users.map(user => {
       const marker = customMarker(user);
-      marker.addListener('click', () => this.router.navigate(['']));
+      marker.addListener('click', () => this.router.navigate(['profile', user.id]));
       return marker;
     })];
+    this.markersClusterer.addMarkers(this.markers);
+  }
 
-    // tslint:disable-next-line:no-unused-expression
-    new MarkerClusterer(this.map, this.markers, {
-      imagePath:
-        'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
+  initClusterer(): void {
+    this.markersClusterer = new MarkerClusterer(this.map, [], {
+      imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
     });
   }
 
   cleanMarkers(): void {
-    this.markers.forEach(marker => marker.setMap(null));
+    this.markersClusterer.clearMarkers();
+  }
+
+  ngOnDestroy() {
+    this.destroyer$.next();
   }
 
 }

@@ -8,7 +8,7 @@ import { map } from 'rxjs/operators';
 const url = environment.baseUrl;
 
 const tokenMapper = (obs: Observable<LoginModel>): Observable<string> => {
-  return obs.pipe(map(data => data.result.token ));
+  return obs.pipe(map(data => data.result.token));
 };
 
 @Injectable({
@@ -16,7 +16,8 @@ const tokenMapper = (obs: Observable<LoginModel>): Observable<string> => {
 })
 export class LoginRegisterService {
 
-  constructor(private http: HttpClient){}
+  constructor(private http: HttpClient) {
+  }
 
   login(data: LoginRegisterModel): Observable<string> {
     return this.http.post(`${url}/v1/user/login`, data).pipe(tokenMapper);
@@ -24,9 +25,5 @@ export class LoginRegisterService {
 
   register(data: LoginRegisterModel): Observable<string> {
     return this.http.post(`${url}/v1/user/register`, data).pipe(tokenMapper);
-  }
-
-  logOut(): Observable<LoginModel> {
-    return this.http.post<LoginModel>(`${url}/v1/user/logout`, {});
   }
 }

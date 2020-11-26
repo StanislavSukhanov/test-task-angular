@@ -6,14 +6,15 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class MainFormsService {
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder) {
+  }
 
   getProfileForm(): FormGroup {
     return this.fb.group({
       firstName: [null],
-      lastName:	[null],
-      gender:	[null],
+      lastName: [null],
+      gender: [null],
       email: [null, [Validators.required]]
     });
-}
+  }
 }

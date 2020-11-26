@@ -22,7 +22,7 @@ export class RegistrationComponent {
     this.loginRegisterService.register($event)
       .subscribe((token: string) => {
         this.storageService.set('token', token);
-        this.router.navigate(['/']);
+        this.router.navigate(['/profile']);
       });
   }
 }

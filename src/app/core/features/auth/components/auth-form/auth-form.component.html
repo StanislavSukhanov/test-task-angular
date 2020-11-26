@@ -10,6 +10,11 @@
     <mat-label>Password</mat-label>
     <input type="password" matInput formControlName="password">
     <mat-error *ngIf="(passwordErrors)?.required">Required</mat-error>
+    <mat-error *ngIf="(passwordErrors)?.minLength">Minimum 6 characters</mat-error>
   </mat-form-field>
-  <button [disabled]="loginForm.invalid" type="submit" mat-flat-button color="primary">Submit</button>
+  <button class="mb-24" [disabled]="loginForm.invalid" type="submit" mat-flat-button color="primary">Submit</button>
+  <div class="pt-20">
+    <a *ngIf="title==='Login'" routerLink="/auth/register">Register here</a>
+    <a *ngIf="title==='Register'" routerLink="/auth/login">Log in here</a>
+  </div>
 </form>

@@ -11,7 +11,7 @@ export class AuthFormsService {
   getLoginRegisterForm(): FormGroup {
     return this.fb.group({
         email: [null, [Validators.required, Validators.pattern('^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$')]],
-        password: [null, [Validators.required]]
+        password: [null, [Validators.required, Validators.minLength(6)]]
       }
     );
   }

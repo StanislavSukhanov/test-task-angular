@@ -3,7 +3,9 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { UserModel } from '../../../../shared/models/shared.models';
 import { ApiService } from './api.service';
 import { tap } from 'rxjs/operators';
-import { centerOfKyiv } from '../constants/constants';
+import { centerOfKyiv, setFallbackLocationById } from '../constants/constants';
+import { AppStorageService } from '../../../../services/app-storage-service';
+import { Router } from '@angular/router';
 
 // todo discover how to implement a common observer win a class
 
@@ -13,7 +15,8 @@ import { centerOfKyiv } from '../constants/constants';
 export class UserDataService {
 
   currentUser$: BehaviorSubject<UserModel | null> = new BehaviorSubject<UserModel | null>(null);
-  constructor(private apiService: ApiService) {
+
+  constructor(private apiService: ApiService, private storageService: AppStorageService, private router: Router) {
   }
 
   get userData(): Observable<UserModel> {
@@ -24,7 +27,7 @@ export class UserDataService {
     return this.currentUser$.value;
   }
 
-  setUser(val: UserModel){
+  setUser(val: UserModel) {
     this.currentUser$.next(val);
   }
 
@@ -35,7 +38,7 @@ export class UserDataService {
     ).subscribe((user: UserModel) => {
       // case where user location is not set
       if (!user.lon || !user.lat) {
-        this.setLocation();
+        this.setLocation(user.id);
       }
     });
   }
@@ -48,9 +51,9 @@ export class UserDataService {
   }
 
   updateUserPhoto(data: FormData): void {
-      this.apiService.updateUserPhoto(data).pipe(
-        tap(user => this.setUser(user))
-      ).subscribe();
+    this.apiService.updateUserPhoto(data).pipe(
+      tap(user => this.setUser(user))
+    ).subscribe();
   }
 
   deletePhoto(): void {
@@ -64,7 +67,7 @@ export class UserDataService {
     ).subscribe();
   }
 
-  setLocation(): void {
+  setLocation(id): void {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position: Position) => {
@@ -78,7 +81,7 @@ export class UserDataService {
             ).subscribe();
         },
         () => {
-          this.apiService.setUserLocation(centerOfKyiv)
+          this.apiService.setUserLocation(setFallbackLocationById(id))
             .pipe(
               tap(user => this.setUser(user))
             ).subscribe();
@@ -86,10 +89,18 @@ export class UserDataService {
         {maximumAge: 60000, timeout: 5000, enableHighAccuracy: true}
       );
     } else {
-      this.apiService.setUserLocation(centerOfKyiv)
+      this.apiService.setUserLocation(setFallbackLocationById(id))
         .pipe(
           tap(user => this.setUser(user))
         ).subscribe();
     }
+  }
+
+  logOut() {
+    return this.apiService.logOut().subscribe(res => {
+      this.storageService.remove('token');
+      this.setUser(null);
+      this.router.navigate(['auth']);
+    });
   }
 }

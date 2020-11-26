@@ -5,6 +5,7 @@ import { UserDataService } from '../../services/user-data.service';
 import { takeUntil } from 'rxjs/operators';
 import { FormGroup } from '@angular/forms';
 import { MainFormsService } from '../../services/main-forms.service';
+import { SearchUsersService } from '../../services/search-users.service';
 
 
 @Component({
@@ -20,7 +21,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
   updateForm: FormGroup = this.formService.getProfileForm();
   userPhoto: string;
 
-  constructor(private userDataService: UserDataService, private formService: MainFormsService) { }
+  constructor(private userDataService: UserDataService,
+              private formService: MainFormsService,
+              private users: SearchUsersService,
+  ) {
+  }
 
   ngOnInit(): void {
     this.user$.pipe(takeUntil(this.destroy$)).subscribe((user: UserModel) => {
@@ -45,5 +50,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   updatePhoto($event: FormData): void {
     this.userDataService.updateUserPhoto($event);
+    // update users so that to show right photo
+    this.users.getAllUsers();
+  }
+
+  logOut() {
+    this.userDataService.logOut();
   }
 }

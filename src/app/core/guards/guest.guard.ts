@@ -9,6 +9,7 @@ import { AppStorageService } from '../../services/app-storage-service';
 export class GuestGuard implements CanActivate, CanLoad {
   constructor(private storage: AppStorageService, private router: Router) {
   }
+
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
