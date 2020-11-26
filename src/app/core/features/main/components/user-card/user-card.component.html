@@ -1,0 +1,9 @@
+<mat-card (click)="redirect(user.id)" class="cursor-pointer">
+  <div mat-card-avatar class="mb-8">
+    <img class="user-image" [src]="user.image || imageFallbackUrl" alt="">
+  </div>
+  <div>
+    <mat-card-title>{{user.firstName}} {{user.lastName}}</mat-card-title>
+    <mat-card-subtitle>{{user.email}}</mat-card-subtitle>
+  </div>
+</mat-card>

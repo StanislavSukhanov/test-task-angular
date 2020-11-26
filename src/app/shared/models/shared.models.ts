@@ -10,6 +10,7 @@ export interface UserModel {
   gender?:	string;
   createdAt?:	string;
   updatedAt?:	string;
+  id: number;
 }
 
 export interface BasicResponseModel {

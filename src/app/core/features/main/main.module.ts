@@ -7,13 +7,26 @@ import { MapComponent } from './components/map/map.component';
 import { ListComponent } from './components/list/list.component';
 import { MainFormsService } from './services/main-forms.service';
 import { UserPhotoComponent } from './components/user-photo/user-photo.component';
+import { MapContainerComponent } from './components/map-container/map-container.component';
+import { UserCardComponent } from './components/user-card/user-card.component';
+import { UserPreviewComponent } from './components/user-preview/user-preview.component';
 
 @NgModule({
-  declarations: [MainLayoutComponent, ProfileComponent, MapComponent, ListComponent, UserPhotoComponent],
+  declarations: [
+    MainLayoutComponent,
+    ProfileComponent,
+    MapComponent,
+    ListComponent,
+    UserPhotoComponent,
+    MapContainerComponent,
+    UserCardComponent,
+    UserPreviewComponent
+  ],
   imports: [
     SharedModule,
     MainRoutingModule
   ],
   providers: [MainFormsService]
 })
-export class MainModule { }
+export class MainModule {
+}

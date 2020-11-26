@@ -1,0 +1,10 @@
+<div class="flex flex-column align-center">
+  <mat-card class="image-container mb-32">
+    <img mat-card-image [src]="photoUrl || fallbackPhotoUrl" alt="user photo">
+  </mat-card>
+  <div *ngIf="enableSend" class="flex flex-row space-between">
+    <input id="fileInput" #ref style="display: none" type="file" (change)="handleUpload($event.target.files)">
+    <button mat-flat-button style="margin-right: 8px" color="primary" (click)="focus(ref)">Upload photo</button>
+    <button mat-flat-button color="warn" (click)="delete()">Delete photo</button>
+  </div>
+</div>

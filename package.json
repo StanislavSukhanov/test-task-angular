@@ -24,6 +24,7 @@
     "@types/googlemaps": "^3.40.3",
     "ngx-webstorage-service": "^4.1.0",
     "rxjs": "~6.5.4",
+    "spherical-geometry-js": "^2.0.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.2"
   },
@@ -32,6 +33,7 @@
     "@angular/cli": "~11.0.2",
     "@angular/compiler-cli": "~11.0.2",
     "@angular/language-service": "~11.0.2",
+    "@google/markerclusterer": "^2.0.9",
     "@types/jasmine": "~3.6.0",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "^12.11.1",

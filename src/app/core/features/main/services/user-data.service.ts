@@ -3,13 +3,18 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { UserModel } from '../../../../shared/models/shared.models';
 import { ApiService } from './api.service';
 import { tap } from 'rxjs/operators';
+import { centerOfKyiv } from '../constants/constants';
+
+// todo discover how to implement a common observer win a class
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserDataService {
+
   currentUser$: BehaviorSubject<UserModel | null> = new BehaviorSubject<UserModel | null>(null);
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: ApiService) {
+  }
 
   get userData(): Observable<UserModel> {
     return this.currentUser$.asObservable();
@@ -27,7 +32,12 @@ export class UserDataService {
     // setting a value of a current user
     this.apiService.getUserDetails().pipe(
       tap(user => this.setUser(user))
-    ).subscribe();
+    ).subscribe((user: UserModel) => {
+      // case where user location is not set
+      if (!user.lon || !user.lat) {
+        this.setLocation();
+      }
+    });
   }
 
   updateUserData(data: UserModel): void {
@@ -52,5 +62,34 @@ export class UserDataService {
         this.setUser(newUserValue);
       })
     ).subscribe();
+  }
+
+  setLocation(): void {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position: Position) => {
+          const userPosition = {
+            lat: position.coords.latitude,
+            lon: position.coords.longitude,
+          };
+          this.apiService.setUserLocation(userPosition)
+            .pipe(
+              tap(user => this.setUser(user))
+            ).subscribe();
+        },
+        () => {
+          this.apiService.setUserLocation(centerOfKyiv)
+            .pipe(
+              tap(user => this.setUser(user))
+            ).subscribe();
+        },
+        {maximumAge: 60000, timeout: 5000, enableHighAccuracy: true}
+      );
+    } else {
+      this.apiService.setUserLocation(centerOfKyiv)
+        .pipe(
+          tap(user => this.setUser(user))
+        ).subscribe();
+    }
   }
 }
