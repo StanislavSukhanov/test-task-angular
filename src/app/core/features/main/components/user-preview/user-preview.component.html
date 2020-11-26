@@ -1,7 +1,0 @@
-<div class="flex flex-row space-around" *ngIf="(user$ | async) as user">
-  <app-user-photo [enableSend]="false" [photoUrl]="user.image"></app-user-photo>
-  <div>
-    <h2>{{(user.firstName && user.lastName) ? user.firstName + ' ' + user.lastName : user.email }}</h2>
-    <h3>{{(user.city && user.country) ? user.city + ' ' + user.country : 'Origin unknown' }}</h3>
-  </div>
-</div>
